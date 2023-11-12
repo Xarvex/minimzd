@@ -1,1 +1,13 @@
-minimzd
+bin
+generated
+include
+libs
+obj
+pkgconfig
+third-party
+
+compile_flags.txt
+valgrind*.txt*
+.*.core.*
+
+*.tmp
