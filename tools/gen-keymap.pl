@@ -9,7 +9,7 @@ if (@ARGV != 2) {
 
 
 
-open IN, $ARGV[0] || die "Cannot open $ARGV[0]: $!\n";
+open IN, $ARGV[0] or die "Cannot open $ARGV[0]: $!\n";
 
 my %keycodes = ();
 my %translations = (
@@ -20,15 +20,14 @@ while (<IN>) {
     next if (!/^#define/);
 
     /(KEY_((?:KP|FN_)?(?:(LEFT|RIGHT)([^_][\w_]*))?(\4|[\w_]*)))/;
-    next if (!defined $1);
-    next if ($1 =~ /(?:MIN_INTERESTING|MAX|CNT)$/);
+    next if (!defined $1 or $1 =~ /(?:MIN_INTERESTING|MAX|CNT)$/);
 
     my $keyname = $2;
     if (defined $3) {
         if (
-            $4 eq 'CTRL' ||
-            $4 eq 'SHIFT' ||
-            $4 eq 'ALT' ||
+            $4 eq 'CTRL' or
+            $4 eq 'SHIFT' or
+            $4 eq 'ALT' or
             $4 eq 'META'
         ) {
             next if (!($3 eq 'LEFT'));
@@ -46,7 +45,7 @@ undef %translations;
 
 
 
-open IN, $ARGV[1] || die "Cannot open $ARGV[1]: $!\n";
+open IN, $ARGV[1] or die "Cannot open $ARGV[1]: $!\n";
 
 my $start = 0;
 my %keynames = ();
@@ -60,10 +59,7 @@ while (<IN>) {
 
     /\"(?:(?:([\w_]*)(?:_(L|R)))|([\w]*))\\/;
     my $keyname = lc(defined $1 ? $1 : $3);
-    if (defined $2) {
-        next if ($2 eq 'R');
-    }
-    next if (!exists $keycodes{$keyname});
+    next if ((defined $2 and $2 eq 'R') or !exists $keycodes{$keyname});
     $keynames{$keyname} = ();
 }
 
