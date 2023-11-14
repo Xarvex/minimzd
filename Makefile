@@ -86,9 +86,9 @@ endef
 
 define update-local-dependency-git
 if $(call test-local-dependency,$(1)); then\
-	git -C $(1) pull;\
+	git -C $(1) pull -q;\
 	else\
-	git clone $(2) $(1);\
+	git clone -q $(2) $(1);\
 	fi
 endef
 
@@ -153,13 +153,14 @@ $(YYJSONBDIR): | $(YYJSONDIR) $(YYJSONSDIR)
 
 $(YYJSONBDIR)/libyyjson.a: | $(YYJSONBDIR)
 	cmake $(YYJSONDIR) -S $(YYJSONDIR) -B $(YYJSONBDIR)\
+		-DCMAKE_MESSAGE_LOG_LEVEL=WARNING\
 		-DYYJSON_DISABLE_WRITER=ON\
 		-DYYJSON_DISABLE_UTILS=ON\
 		-DYYJSON_DISABLE_FAST_FP_CONV=ON\
 		-DYYJSON_DISABLE_NON_STANDARD=ON\
 		-DYYJSON_DISABLE_UTF8_VALIDATION=ON\
 		-DYYJSON_DISABLE_UNALIGNED_MEMORY_ACCESS=ON\
-		&& cmake --build $(YYJSONBDIR)
+		&& cmake --build $(YYJSONBDIR) -- -s
 
 $(PKGDIR)/yyjson.pc: | $(YYJSONSDIR) $(YYJSONBDIR)/libyyjson.a $(PKGDIR)
 	printf "Name: yyjson\nDescription: %s\nVersion: %s\nCflags: -I%s\nLibs: -L%s -l:libyyjson.a"\
