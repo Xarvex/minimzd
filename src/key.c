@@ -7,6 +7,9 @@
 #include <linux/uinput.h>
 
 const mzd_key mzd_keycode(const char *key_name) {
+    if (!strncmp (key_name,"XF86", 4))
+        key_name += 4;
+
     int c = strlen(key_name);
     char *name = malloc(c + 1);
     name[c] = 0;
