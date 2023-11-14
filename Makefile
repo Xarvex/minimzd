@@ -195,7 +195,7 @@ $(GDIR):
 
 $(DJB2): $(djb2)
 $(djb2): $(SDIR)/util.c $(SDIR)/util.h | $(GDIR)
-	printf '#include"$(SDIR)/util.h"\n#include<stdio.h>\nint main(const int c,const char**v){printf("%%luul\\n",mzd_str_hash_djb2(c==1?"":v[1]));}'\
+	printf '#include"$(SDIR)/util.h"\n#include<stdio.h>\nint main(const int c,const char**v){printf("%%luul\\n",mzd_str_djb2(c==1?"":v[1]));}'\
 		| $(CC) -Wall -O3 -x c - $(SDIR)/util.c -o $@
 
 execute: $(TARGET)
