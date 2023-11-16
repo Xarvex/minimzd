@@ -218,7 +218,7 @@ reset: clean-deep
 	-rm -rf $(LDIR)
 	-rm -rf $(PKGDIR)
 	-rm -rf $(TPDIR)
-	-rm -rf compile_flags.txt
+	-rm -f compile_flags.txt
 
 .PRECIOUS: $(TARGET) $(objects)
 .PHONY: default all setup ldd valgrind djb2 clean clean-deep reset
