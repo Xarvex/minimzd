@@ -8,6 +8,7 @@ struct MzdContext {
     bool first;
     bool list;
     bool verify;
+    bool background;
     bool close_window;
     bool keybind;
     bool extract_keybind;

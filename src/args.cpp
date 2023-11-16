@@ -20,6 +20,7 @@ void mzd_args_populate_context(struct MzdContext *context, const int argc, const
         ("list,l", "Lists all detectable windows", cxxopts::value<bool>()->default_value("false"))
         ("first,F", "Stop after the first match is minimized", cxxopts::value<bool>()->default_value("false"))
         ("verify,V", "Verify that the window was actually minimized", cxxopts::value<bool>()->default_value("false"))
+        ("background,B", "Run command in background and exit early", cxxopts::value<bool>()->default_value("false"))
         ("close-window,x", "Close the window, useful for applications that run in background", cxxopts::value<bool>()->default_value("false"))
         ("keybind,k", "Use a keybind for specified action, which may give alternative behavior", cxxopts::value<bool>()->default_value("false"))
         ("extract-keybind,e", "Extracts any needed keybind from GNOME settings", cxxopts::value<bool>()->default_value("false"))
@@ -45,6 +46,7 @@ void mzd_args_populate_context(struct MzdContext *context, const int argc, const
     context->first = result["first"].as<bool>();
     context->list = result["list"].as<bool>();
     context->verify = result["verify"].as<bool>();
+    context->background = result["background"].as<bool>();
     context->close_window = result["close-window"].as<bool>();
     context->keybind = result["keybind"].as<bool>();
     context->extract_keybind = result["extract-keybind"].as<bool>();

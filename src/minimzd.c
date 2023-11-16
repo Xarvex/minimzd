@@ -3,6 +3,7 @@
 #include "key.h"
 #include "util.h"
 #include "window.h"
+#include <fcntl.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -19,11 +20,17 @@
 #define ANSI_CYAN    "\x1b[36m"
 #define ANSI_RESET   "\x1b[0m"
 
-pid_t mzd_fork_execute(const char **command) {
+pid_t mzd_fork_execute(const char **command, const bool silent) {
     pid_t pid = fork();
     if (pid < 0)
         perror("Could not fork process");
     else if (!pid) {
+        if (silent) {
+            const int fd = open("/dev/null", O_WRONLY);
+            dup2(fd, 1);
+            dup2(fd, 2);
+            close(fd);
+        }
         // does not modify command
         execvp(command[0], (char *const *) command);
         perror("Could not execute command");
@@ -105,7 +112,7 @@ int main(const int argc, const char **argv) {
 
     pid_t pid = 0;
     if (c.command) {
-        pid = mzd_fork_execute(c.command);
+        pid = mzd_fork_execute(c.command, c.background);
         if (c.match_pid)
             c.pid = pid;
     }
@@ -130,7 +137,7 @@ int main(const int argc, const char **argv) {
     mzd_context_free(&c);
 
     int status = 0;
-    if (pid)
+    if (pid && !c.background)
         waitpid(pid, &status, 0);
     exit(status);
 }
