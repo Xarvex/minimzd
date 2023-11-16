@@ -58,7 +58,6 @@ YYJSONFLAGS := -DYYJSON_DISABLE_WRITER=ON -DYYJSON_DISABLE_UTILS=ON -DYYJSON_DIS
 DJB2 := djb2
 KMAP := keymap
 
-APATH := $(SCRDIR)/abspath.py
 RPATH := $(SCRDIR)/relpath.py
 CKMAP := $(SCRDIR)/gen-keymap.pl
 
