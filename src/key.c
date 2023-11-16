@@ -16,7 +16,7 @@ const mzd_key mzd_keycode(const char *key_name) {
     for(int i = 0; i < c; i++)
         name[i] = tolower(key_name[i]);
 
-    const char **result = bsearch(&name, mzd_keymap_names, MZD_KEYMAP_LEN, sizeof(char **), mzd_strptr_cmp);
+    const char **result = bsearch(&name, mzd_keymap_names, MZD_KEYMAP_LEN, sizeof(char *), mzd_strptr_cmp);
     if (name)
         free(name);
 
