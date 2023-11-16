@@ -69,7 +69,7 @@ target := $(TDIR)/$(TARGET)
 
 odir := $(ODIR)/$(MODE)
 
-libs = $(LIBS) $(wildcard $(PKGDIR)/*.pc)
+libs = $(LIBS) $(wildcard $(shell readlink -f $(PKGDIR))/*.pc)
 
 cobjects   := $(patsubst $(SDIR)/%.c, $(odir)/%.o, $(wildcard $(SDIR)/*.c))
 cppobjects := $(patsubst $(SDIR)/%.cpp, $(odir)/%.opp, $(wildcard $(SDIR)/*.cpp))
