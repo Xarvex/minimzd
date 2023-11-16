@@ -92,6 +92,10 @@ void mzd_window_manipulator_uinput_use_minimize(const struct MzdWindowManipulato
     mzd_uinput_use(window_manipulator->fd, window_manipulator->minimize_keybind);
 }
 
+void mzd_window_manipulator_uinput_use_close(const struct MzdWindowManipulator *window_manipulator) {
+    mzd_uinput_use(window_manipulator->fd, window_manipulator->close_keybind);
+}
+
 
 
 DBusMessage *mzd_unsafe_window_manipulator_dbus_call_send(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query) {
