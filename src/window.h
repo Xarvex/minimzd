@@ -47,6 +47,7 @@ void mzd_window_manipulator_dbus_connect(struct MzdWindowManipulator *window_man
 void mzd_window_manipulator_setting_connect(struct MzdWindowManipulator *window_manipulator);
 void mzd_window_manipulator_setting_keybind(struct MzdWindowManipulator *window_manipulator);
 
+void mzd_window_manipulator_uinput_attach(struct MzdWindowManipulator *window_manipulator);
 void mzd_window_manipulator_uinput_use_minimize(const struct MzdWindowManipulator *window_manipulator);
 
 DBusMessage *mzd_unsafe_window_manipulator_dbus_call_send(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query);
