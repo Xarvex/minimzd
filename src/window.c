@@ -62,24 +62,21 @@ void mzd_window_manipulator_dbus_connect(struct MzdWindowManipulator *window_man
 }
 
 void mzd_window_manipulator_setting_connect(struct MzdWindowManipulator *window_manipulator) {
+    window_manipulator->gsettings = mzd_keybind_gsettings();
 }
 
 void mzd_window_manipulator_setting_keybind(struct MzdWindowManipulator *window_manipulator) {
-    GSettings *settings = mzd_keybind_settings();
-
-    const mzd_key **minimize_keybindv = mzd_unsafe_keybindv_extract_minimize(settings);
+    const mzd_key **minimize_keybindv = mzd_unsafe_keybindv_extract_minimize(window_manipulator->gsettings);
     window_manipulator->minimize_keybind = minimize_keybindv[0];
     for (int i = 1; minimize_keybindv[i]; i++)
         free((void *) minimize_keybindv[i]);
     free(minimize_keybindv);
 
-    const mzd_key **close_keybindv = mzd_unsafe_keybindv_extract_close(settings);
+    const mzd_key **close_keybindv = mzd_unsafe_keybindv_extract_close(window_manipulator->gsettings);
     window_manipulator->close_keybind = close_keybindv[0];
     for (int i = 1; close_keybindv[i]; i++)
         free((void *) close_keybindv[i]);
     free(close_keybindv);
-
-    g_object_unref(settings);
 }
 
 
@@ -219,6 +216,8 @@ void mzd_window_manipulator_free(const struct MzdWindowManipulator *window_manip
     dbus_connection_close(window_manipulator->dbus);
     dbus_connection_unref(window_manipulator->dbus);
     dbus_shutdown();
+    if (window_manipulator->gsettings)
+        g_object_unref(window_manipulator->gsettings);
     if (window_manipulator->minimize_keybind)
         free((void *)window_manipulator->minimize_keybind);
     if (window_manipulator->close_keybind)
