@@ -4,7 +4,7 @@
 #include <gio/gio.h>
 #include <stdbool.h>
 
-#define mzd_keybind_settings() g_settings_new("org.gnome.desktop.wm.keybindings")
+#define mzd_keybind_gsettings() g_settings_new("org.gnome.desktop.wm.keybindings")
 
 typedef unsigned int mzd_key;
 
