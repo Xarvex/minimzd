@@ -110,8 +110,10 @@ int main(const int argc, const char **argv) {
             c.pid = pid;
     }
 
-    if (c.extract_keybind)
+    if (c.extract_keybind) {
+        mzd_window_manipulator_setting_connect(&wm);
         mzd_window_manipulator_setting_keybind(&wm);
+    }
 
     struct MzdWindowFilter *window_filter = 0;
     if (c.pid)
