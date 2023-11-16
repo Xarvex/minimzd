@@ -17,20 +17,15 @@ my %translations = (
     'META' => 'SUPER'
 );
 while (<IN>) {
-    next if (!/^#define/);
+    next if (not /^#define/);
 
     /(KEY_((?:KP|FN_)?(?:(LEFT|RIGHT)([^_][\w_]*))?(\4|[\w_]*)))/;
-    next if (!defined $1 or $1 =~ /(?:MIN_INTERESTING|MAX|CNT)$/);
+    next if (not defined $1 or $1 =~ /(?:MIN_INTERESTING|MAX|CNT)$/);
 
     my $keyname = $2;
     if (defined $3) {
-        if (
-            $4 eq 'CTRL' or
-            $4 eq 'SHIFT' or
-            $4 eq 'ALT' or
-            $4 eq 'META'
-        ) {
-            next if (!($3 eq 'LEFT'));
+        if ($4 eq 'CTRL' or $4 eq 'SHIFT' or $4 eq 'ALT' or $4 eq 'META') {
+            next if (not ($3 eq 'LEFT'));
             $keyname = exists $translations{$4} ? $translations{$4} : $4;
         } else {
             $keyname = $4 . $3;
@@ -50,8 +45,8 @@ open IN, $ARGV[1] or die "Cannot open $ARGV[1]: $!\n";
 my $start = 0;
 my %keynames = ();
 while (<IN>) {
-    if (!$start) {
-        next if (!/char\s*keynames\s*\[\s*\]\s*=\s*$/);
+    if (not $start) {
+        next if (not /char\s*keynames\s*\[\s*\]\s*=\s*$/);
         $start = 1;
         next;
     }
@@ -59,7 +54,7 @@ while (<IN>) {
 
     /\"(?:(?:([\w_]*)(?:_(L|R)))|([\w]*))\\/;
     my $keyname = lc(defined $1 ? $1 : $3);
-    next if ((defined $2 and $2 eq 'R') or !exists $keycodes{$keyname});
+    next if ((defined $2 and $2 eq 'R') or not exists $keycodes{$keyname});
     $keynames{$keyname} = ();
 }
 
