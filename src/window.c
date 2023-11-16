@@ -81,14 +81,14 @@ void mzd_window_manipulator_setting_keybind(struct MzdWindowManipulator *window_
 
 
 
-void mzd_window_manipulator_input_attach(struct MzdWindowManipulator *window_manipulator) {
+void mzd_window_manipulator_uinput_attach(struct MzdWindowManipulator *window_manipulator) {
     window_manipulator->fd = mzd_uinput_connect();
     mzd_uinput_prepare(window_manipulator->fd, window_manipulator->minimize_keybind);
     mzd_uinput_prepare(window_manipulator->fd, window_manipulator->close_keybind);
     mzd_uinput_setup(window_manipulator->fd);
 }
 
-void mzd_window_manipulator_keybind_use_minimize(const struct MzdWindowManipulator *window_manipulator) {
+void mzd_window_manipulator_uinput_use_minimize(const struct MzdWindowManipulator *window_manipulator) {
     mzd_uinput_use(window_manipulator->fd, window_manipulator->minimize_keybind);
 }
 
