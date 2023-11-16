@@ -73,7 +73,7 @@ print <<EOF;
 #ifndef MZD_GEN_KEYCODE_H
 #define MZD_GEN_KEYCODE_H
 
-#include <linux/uinput.h>
+#include <linux/input-event-codes.h>
 
 EOF
 my @keynames = sort keys %keynames;
