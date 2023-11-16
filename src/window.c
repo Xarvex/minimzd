@@ -104,7 +104,6 @@ DBusMessage *mzd_unsafe_window_manipulator_dbus_call_send(const struct MzdWindow
         500,
         &dbus_error
     );
-    dbus_connection_flush(window_manipulator->dbus);
     mzd_dbus_error_guard(&dbus_error);
 
     dbus_error_free(&dbus_error);
