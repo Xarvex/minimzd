@@ -25,7 +25,7 @@ while (<IN>) {
     my $keyname = $2;
     if (defined $3) {
         if ($4 eq 'CTRL' or $4 eq 'SHIFT' or $4 eq 'ALT' or $4 eq 'META') {
-            next if (not ($3 eq 'LEFT'));
+            next if (not $3 eq 'LEFT');
             $keyname = exists $translations{$4} ? $translations{$4} : $4;
         } else {
             $keyname = $4 . $3;
