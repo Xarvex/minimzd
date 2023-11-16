@@ -22,9 +22,9 @@ const mzd_key **mzd_unsafe_keybindv_extract(GSettings *settings, const char *key
 const mzd_key **mzd_unsafe_keybindv_extract_minimize(GSettings *settings);
 const mzd_key **mzd_unsafe_keybindv_extract_close(GSettings *settings);
 
-const mzd_key **mzd_keybindv_extract(const char *keybind_str);
-const mzd_key **mzd_keybindv_extract_minimize();
-const mzd_key **mzd_keybindv_extract_close();
+const mzd_key **mzd_keybindv_extract(GSettings *settings, const char *keybind_str);
+const mzd_key **mzd_keybindv_extract_minimize(GSettings *settings);
+const mzd_key **mzd_keybindv_extract_close(GSettings *settings);
 
 void mzd_keybindv_free(const mzd_key **keybindv);
 

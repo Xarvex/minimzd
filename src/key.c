@@ -109,20 +109,19 @@ const mzd_key **mzd_unsafe_keybindv_extract_close(GSettings *settings) {
 
 
 
-const mzd_key **mzd_keybindv_extract(const char *keybind_str) {
-    GSettings *settings = mzd_keybind_settings();
+const mzd_key **mzd_keybindv_extract(GSettings *settings, const char *keybind_str) {
     const mzd_key **keybindv = mzd_unsafe_keybindv_extract(settings, keybind_str);
 
     g_object_unref(settings);
     return keybindv;
 }
 
-const mzd_key ** mzd_keybindv_extract_minimize() {
-    return mzd_keybindv_extract("minimize");
+const mzd_key ** mzd_keybindv_extract_minimize(GSettings *settings) {
+    return mzd_keybindv_extract(settings, "minimize");
 }
 
-const mzd_key ** mzd_keybindv_extract_close() {
-    return mzd_keybindv_extract("close");
+const mzd_key ** mzd_keybindv_extract_close(GSettings *settings) {
+    return mzd_keybindv_extract(settings, "close");
 }
 
 void mzd_keybindv_free(const mzd_key **keybindv) {
