@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 struct MzdContext {
-    const char *help;
+    bool help;
     bool first;
     bool list;
     bool verify;

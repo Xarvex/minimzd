@@ -1,5 +1,6 @@
 #include "args.hpp"
 #include <cxxopts.hpp>
+#include <iostream>
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,7 +38,8 @@ void mzd_args_populate_context(struct MzdContext *context, const int argc, const
     const auto result = options.parse(argc, argv);
 
     if (result.count("help")) {
-        context->help = options.help().c_str();
+        context->help = true;
+        std::cout << options.help() << std::endl;
         return;
     }
 

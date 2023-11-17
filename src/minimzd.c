@@ -54,11 +54,8 @@ bool mzd_window_filter_call_class(const struct MzdWindow *window, char **window_
 int main(const int argc, const char **argv) {
     struct MzdContext c = mzd_context_default;
     mzd_args_populate_context(&c, argc, argv);
-    if (c.help) {
-        puts(c.help);
-        mzd_context_free(&c);
+    if (c.help)
         return 0;
-    }
 
     const bool color = isatty(fileno(stdout));
 
