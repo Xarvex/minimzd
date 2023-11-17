@@ -10,6 +10,9 @@
 #define MZD_DJB2_WINDOW_TYPE          13899948338458281438ul // "window_type"
 #define MZD_DJB2_FOCUS                210712614469ul         // "focus"
 
+#define mzd_nanoseconds_ms(x) x * 1000000L
+#define mzd_nanoseconds_s(x) mzd_nanoseconds_ms(x * 1000)
+
 const char **mzd_str_split(const char *str, const char delim, void **ptr);
 unsigned long mzd_str_djb2(const char *str);
 
