@@ -195,12 +195,16 @@ const struct MzdWindow **mzd_window_manipulator_list(const struct MzdWindowManip
     return windows;
 }
 
+void mzd_window_manipulator_focus(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window) {
+    mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Activate", window);
+}
+
 void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window) {
     mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Minimize", window);
 }
 
-void mzd_window_manipulator_focus(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window) {
-    mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Activate", window);
+void mzd_window_manipulator_close(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window) {
+    mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Close", window);
 }
 
 void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter) {
