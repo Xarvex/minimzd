@@ -69,7 +69,8 @@ target := $(TDIR)/$(TARGET)
 
 odir := $(ODIR)/$(MODE)
 
-libs = $(LIBS) $(wildcard $(shell readlink -f $(PKGDIR))/*.pc)
+setup := $(YYJSONDIR) $(IDIR)/$(KMAP).h $(PKGDIR)/yyjson.pc compile_flags.txt
+libs   = $(LIBS) $(wildcard $(shell readlink -f $(PKGDIR))/*.pc)
 
 cobjects   := $(patsubst $(SDIR)/%.c, $(odir)/%.o, $(wildcard $(SDIR)/*.c))
 cppobjects := $(patsubst $(SDIR)/%.cpp, $(odir)/%.opp, $(wildcard $(SDIR)/*.cpp))
@@ -168,12 +169,12 @@ compile_flags.txt: $(PKGDIR)/yyjson.pc | $(IDIR)
 	$(PKGOBJ) $(libs) | tr ' ' '\n' > $@
 	echo "-I$(IDIR)" >> $@
 
-setup: $(YYJSONDIR) $(IDIR)/$(KMAP).h $(PKGDIR)/yyjson.pc compile_flags.txt
+setup: $(setup)
 
-$(odir)/%.o: $(SDIR)/%.c $(headers) setup | $(SDIR) $(odir)
+$(odir)/%.o: $(SDIR)/%.c $(headers) $(setup) | $(SDIR) $(odir)
 	$(CC) $(cflags) $$($(PKGOBJ) $(libs)) -I$(IDIR) -c $< -o $@
 
-$(odir)/%.opp: $(SDIR)/%.cpp $(headers) setup | $(SDIR) $(odir)
+$(odir)/%.opp: $(SDIR)/%.cpp $(headers) $(setup) | $(SDIR) $(odir)
 	$(CPPC) $(cppflags) $$($(PKGOBJ) $(libs)) -I$(IDIR) -c $< -o $@
 
 $(ODIR)/.mode_$(MODE): $(ODIR)
@@ -181,7 +182,7 @@ $(ODIR)/.mode_$(MODE): $(ODIR)
 	touch $@
 
 $(TARGET): $(target)
-$(target): $(objects) setup $(ODIR)/.mode_$(MODE) | $(TDIR)
+$(target): $(objects) $(setup) $(ODIR)/.mode_$(MODE) | $(TDIR)
 	$(CPPC) $(objects) $$($(PKGT) $(libs)) -o $@
 	$(post)
 
