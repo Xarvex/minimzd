@@ -89,7 +89,6 @@ int main(const int argc, const char **argv) {
 
     if (1) {
         printf("flags: %d\n", c.flags);
-        printf("keybind: %d\n", c.keybind);
         printf("extract_keybind: %d\n", c.extract_keybind);
         printf("match_pid: %d\n", c.match_pid);
         printf("match_process_name: %d\n", c.match_process_name);
@@ -116,6 +115,9 @@ int main(const int argc, const char **argv) {
         mzd_window_manipulator_setting_connect(&wm);
         mzd_window_manipulator_setting_keybind(&wm);
     }
+
+    if (mzd_flags_has(c.flags, MZD_KEYBIND))
+        mzd_window_manipulator_uinput_attach(&wm);
 
     struct MzdWindowFilter *window_filter = 0;
     if (c.pid)

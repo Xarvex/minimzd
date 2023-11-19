@@ -53,9 +53,10 @@ void mzd_args_populate_context(struct MzdContext *context, const int argc, const
         mzd_flags_set(flags, MZD_VERIFY);
     if (result["close"].as<bool>())
         mzd_flags_set(flags, MZD_CLOSE);
+    if (result["keybind"].as<bool>())
+        mzd_flags_set(flags, MZD_KEYBIND);
     context->flags = flags;
     context->background = result["background"].as<bool>();
-    context->keybind = result["keybind"].as<bool>();
     context->extract_keybind = result["extract-keybind"].as<bool>();
     context->match_pid = result["match-pid"].as<bool>();
     context->match_process_name = result["match-process-name"].as<bool>();

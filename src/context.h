@@ -8,7 +8,6 @@ struct MzdContext {
     bool list;
     unsigned short flags;
     bool background;
-    bool keybind;
     bool extract_keybind;
     bool match_pid;
     bool match_process_name;
@@ -21,7 +20,7 @@ struct MzdContext {
     void *command_ptr;
 };
 
-static const struct MzdContext mzd_context_default = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+static const struct MzdContext mzd_context_default = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 void mzd_context_free(struct MzdContext *context);
 
