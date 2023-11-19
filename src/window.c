@@ -115,7 +115,7 @@ DBusMessage *mzd_unsafe_window_manipulator_dbus_call_send(const struct MzdWindow
     return response;
 }
 
-const struct MzdWindow **mzd_unsafe_window_manipulator_call_list(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query) {
+const struct MzdWindow **mzd_unsafe_window_manipulator_dbus_call_list(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query) {
     DBusError dbus_error;
     dbus_error_init(&dbus_error); 
 
@@ -174,13 +174,13 @@ const struct MzdWindow **mzd_unsafe_window_manipulator_call_list(const struct Mz
     return windows;
 }
 
-void mzd_unsafe_window_manipulator_call(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query) {
+void mzd_unsafe_window_manipulator_dbus_call(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query) {
     dbus_message_unref(mzd_unsafe_window_manipulator_dbus_call_send(window_manipulator, query));
 }
 
-void mzd_unsafe_window_manipulator_call_with_window(const struct MzdWindowManipulator *window_manipulator, const char *method, const struct MzdWindow *window) {
+void mzd_unsafe_window_manipulator_dbus_call_with_window(const struct MzdWindowManipulator *window_manipulator, const char *method, const struct MzdWindow *window) {
     DBusMessage *query = mzd_dbus_call_create_with_window(method, window);
-    mzd_unsafe_window_manipulator_call(window_manipulator, query);
+    mzd_unsafe_window_manipulator_dbus_call(window_manipulator, query);
 
     dbus_message_unref(query);
 }
@@ -189,14 +189,14 @@ void mzd_unsafe_window_manipulator_call_with_window(const struct MzdWindowManipu
 
 const struct MzdWindow **mzd_window_manipulator_list(const struct MzdWindowManipulator *window_manipulator) {
     DBusMessage *query = mzd_dbus_call_create("List");
-    const struct MzdWindow **windows = mzd_unsafe_window_manipulator_call_list(window_manipulator, query);
+    const struct MzdWindow **windows = mzd_unsafe_window_manipulator_dbus_call_list(window_manipulator, query);
 
     dbus_message_unref(query);
     return windows;
 }
 
 void mzd_window_manipulator_focus(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window) {
-    mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Activate", window);
+    mzd_unsafe_window_manipulator_dbus_call_with_window(window_manipulator, "Activate", window);
 }
 
 void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window, const unsigned short flags) {
@@ -210,8 +210,8 @@ void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_m
     }
     else
         mzd_flags_has(flags, MZD_CLOSE) ?
-            mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Close", window) :
-            mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Minimize", window);
+            mzd_unsafe_window_manipulator_dbus_call_with_window(window_manipulator, "Close", window) :
+            mzd_unsafe_window_manipulator_dbus_call_with_window(window_manipulator, "Minimize", window);
 }
 
 void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter, const unsigned short flags) {
