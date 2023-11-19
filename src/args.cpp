@@ -61,10 +61,10 @@ void mzd_args_populate_context(struct MzdContext *context, const int argc, const
     context->match_pid = result["match-pid"].as<bool>();
     context->match_process_name = result["match-process-name"].as<bool>();
     context->pid = result["pid"].as<int>();
-    const char *fallback = context->command ? context->command[0] : 0;
-    const char *process_name = result.count("process-name") ? result["process-name"].as<std::string>().c_str() : fallback;
-    const char *window_class_instance = result.count("window-class-instance") ? result["window-class-instance"].as<std::string>().c_str() : fallback;
-    const char *window_class = result.count("window-class") ? result["window-class"].as<std::string>().c_str() : fallback;
+    const char *command_name = context->command ? context->command[0] : 0;
+    const char *process_name = result.count("process-name") ? result["process-name"].as<std::string>().c_str() : command_name;
+    const char *window_class_instance = result.count("window-class-instance") ? result["window-class-instance"].as<std::string>().c_str() : command_name;
+    const char *window_class = result.count("window-class") ? result["window-class"].as<std::string>().c_str() : command_name;
     context->process_name = process_name ? strdup(process_name) : 0;
     context->window_class_instance = window_class_instance ? strdup(window_class_instance) : 0;
     context->window_class = window_class ? strdup(window_class) : 0;
