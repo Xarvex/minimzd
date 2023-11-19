@@ -1,9 +1,10 @@
 #ifndef MZD_UTIL_H
 #define MZD_UTIL_H
 
-#define MZD_FIRST  0x1
-#define MZD_VERIFY 0x2
-#define MZD_CLOSE  0x4
+#define MZD_FIRST   0x1
+#define MZD_VERIFY  0x2
+#define MZD_CLOSE   0x4
+#define MZD_KEYBIND 0x8
 
 #define MZD_DJB2_IN_CURRENT_WORKSPACE 5461102616856308236ul  // "in_current_workspace"
 #define MZD_DJB2_WM_CLASS             7573100978736958ul     // "wm_class"

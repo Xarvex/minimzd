@@ -199,12 +199,22 @@ void mzd_window_manipulator_focus(const struct MzdWindowManipulator *window_mani
     mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Activate", window);
 }
 
-void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window) {
-    mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Minimize", window);
+void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window, const unsigned short flags) {
+    if (mzd_flags_has(flags, MZD_KEYBIND)) {
+        if (window->focus)
+            mzd_window_manipulator_uinput_use_minimize(window_manipulator);
+    }
+    else
+        mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Minimize", window);
 }
 
-void mzd_window_manipulator_close(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window) {
-    mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Close", window);
+void mzd_window_manipulator_close(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window, const unsigned short flags) {
+    if (mzd_flags_has(flags, MZD_KEYBIND)) {
+        if (window->focus)
+            mzd_window_manipulator_uinput_use_close(window_manipulator);
+    }
+    else
+        mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Close", window);
 }
 
 void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter, const unsigned short flags) {
@@ -218,8 +228,8 @@ void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_mani
             const struct MzdWindow *window = windows[i];
             if (mzd_window_filter(window_filter, window)) {
                 mzd_flags_has(flags, MZD_CLOSE) ?
-                    mzd_window_manipulator_close(window_manipulator, window) :
-                    mzd_window_manipulator_minimize(window_manipulator, window);
+                    mzd_window_manipulator_close(window_manipulator, window, flags) :
+                    mzd_window_manipulator_minimize(window_manipulator, window, flags);
 
                 if (mzd_flags_has(flags, MZD_FIRST)) {
                     mzd_window_arr_free(windows);
