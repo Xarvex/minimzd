@@ -45,11 +45,16 @@ void mzd_args_populate_context(struct MzdContext *context, const int argc, const
 
     if (result.count("command"))
         context->command = mzd_str_split(result["command"].as<std::string>().c_str(), ' ', &context->command_ptr);
-    context->first = result["first"].as<bool>();
     context->list = result["list"].as<bool>();
-    context->verify = result["verify"].as<bool>();
+    unsigned short flags = 0;
+    if (result["first"].as<bool>())
+        mzd_flags_set(flags, MZD_FIRST);
+    if (result["verify"].as<bool>())
+        mzd_flags_set(flags, MZD_VERIFY);
+    if (result["close"].as<bool>())
+        mzd_flags_set(flags, MZD_CLOSE);
+    context->flags = flags;
     context->background = result["background"].as<bool>();
-    context->close_window = result["close-window"].as<bool>();
     context->keybind = result["keybind"].as<bool>();
     context->extract_keybind = result["extract-keybind"].as<bool>();
     context->match_pid = result["match-pid"].as<bool>();

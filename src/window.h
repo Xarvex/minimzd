@@ -58,7 +58,7 @@ const struct MzdWindow **mzd_window_manipulator_list(const struct MzdWindowManip
 void mzd_window_manipulator_focus(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window);
 void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window);
 void mzd_window_manipulator_close(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window);
-void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter);
+void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter, const unsigned short flags);
 
 void mzd_window_manipulator_free(const struct MzdWindowManipulator *window_manipulator);
 

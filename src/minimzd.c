@@ -88,9 +88,7 @@ int main(const int argc, const char **argv) {
     }
 
     if (1) {
-        printf("first: %d\n", c.first);
-        printf("verify: %d\n", c.verify);
-        printf("close_window: %d\n", c.close_window);
+        printf("flags: %d\n", c.flags);
         printf("keybind: %d\n", c.keybind);
         printf("extract_keybind: %d\n", c.extract_keybind);
         printf("match_pid: %d\n", c.match_pid);
@@ -128,7 +126,7 @@ int main(const int argc, const char **argv) {
         window_filter = mzd_window_filter_init(&mzd_window_filter_call_class, &c.window_class);
 
     if (window_filter)
-        mzd_window_manipulator_match(&wm, window_filter);
+        mzd_window_manipulator_match(&wm, window_filter, c.flags);
 
     mzd_window_manipulator_free(&wm);
     mzd_context_free(&c);

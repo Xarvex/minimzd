@@ -207,20 +207,35 @@ void mzd_window_manipulator_close(const struct MzdWindowManipulator *window_mani
     mzd_unsafe_window_manipulator_call_with_window(window_manipulator, "Close", window);
 }
 
-void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter) {
+void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter, const unsigned short flags) {
     struct timespec time, remaining;
     time.tv_sec = 0;
     time.tv_nsec = mzd_nanoseconds_ms(500);
 
     for (long t = 0; t < mzd_nanoseconds_s(5); t += time.tv_nsec) {
         const struct MzdWindow **windows = mzd_window_manipulator_list(window_manipulator);
-        for (int i = 0; windows[i]; i++)
-            if (mzd_window_filter(window_filter, windows[i]))
-                mzd_window_manipulator_minimize(window_manipulator, windows[i]);
+        for (int i = 0; windows[i]; i++) {
+            const struct MzdWindow *window = windows[i];
+            if (mzd_window_filter(window_filter, window)) {
+                mzd_flags_has(flags, MZD_CLOSE) ?
+                    mzd_window_manipulator_close(window_manipulator, window) :
+                    mzd_window_manipulator_minimize(window_manipulator, window);
+
+                if (mzd_flags_has(flags, MZD_FIRST)) {
+                    mzd_window_arr_free(windows);
+
+                    // really not evil, breaking out of nested loop
+                    goto end;
+                }
+            }
+        }
 
         nanosleep(&time, &remaining);
         mzd_window_arr_free(windows);
     }
+
+// no-op
+end:;
 }
 
 
