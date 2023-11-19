@@ -84,7 +84,7 @@ int main(const int argc, const char **argv) {
             );
         }
 
-        mzd_window_arr_free(windows);
+        mzd_windowv_free(windows);
     }
 
     if (1) {

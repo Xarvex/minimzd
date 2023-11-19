@@ -38,7 +38,7 @@ DBusMessage *mzd_dbus_call_create(const char *method);
 DBusMessage *mzd_dbus_call_create_with_window(const char *method, const struct MzdWindow *window);
 
 void mzd_window_free(const struct MzdWindow *window);
-void mzd_window_arr_free(const struct MzdWindow **windows);
+void mzd_windowv_free(const struct MzdWindow **windows);
 bool mzd_window_filter(struct MzdWindowFilter *window_filter, const struct MzdWindow *window);
 
 void mzd_window_manipulator_dbus_connect(struct MzdWindowManipulator *window_manipulator);

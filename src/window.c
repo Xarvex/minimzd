@@ -41,7 +41,7 @@ void mzd_window_free(const struct MzdWindow *window) {
     free((void *) window);
 }
 
-void mzd_window_arr_free(const struct MzdWindow **windows) {
+void mzd_windowv_free(const struct MzdWindow **windows) {
     for (int i = 0; windows[i]; i++)
         mzd_window_free(windows[i]);
     free(windows);
@@ -232,7 +232,7 @@ void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_mani
                     mzd_window_manipulator_minimize(window_manipulator, window, flags);
 
                 if (mzd_flags_has(flags, MZD_FIRST)) {
-                    mzd_window_arr_free(windows);
+                    mzd_windowv_free(windows);
 
                     // really not evil, breaking out of nested loop
                     goto end;
@@ -241,7 +241,7 @@ void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_mani
         }
 
         nanosleep(&time, &remaining);
-        mzd_window_arr_free(windows);
+        mzd_windowv_free(windows);
     }
 
 // no-op
