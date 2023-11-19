@@ -1,8 +1,6 @@
 #ifndef MZD_WINDOW_H
 #define MZD_WINDOW_H
 
-#define __GIO_GIO_H_INSIDE__
-
 #include "key.h"
 #include <dbus/dbus.h>
 
