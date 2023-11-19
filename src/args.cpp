@@ -24,7 +24,7 @@ void mzd_args_populate_context(struct MzdContext *context, const int argc, const
         ("background,B", "Run command in background and exit early", cxxopts::value<bool>()->default_value("false"))
         ("close,x", "Close the window, useful for applications that run in background", cxxopts::value<bool>()->default_value("false"))
         ("keybind,k", "Use a keybind for specified action, which may give alternative behavior", cxxopts::value<bool>()->default_value("false"))
-        ("extract-keybind,e", "Extracts any needed keybind from GNOME settings", cxxopts::value<bool>()->default_value("false"))
+        ("extract-keybind,e", "Extracts any needed keybind from GNOME settings, implies keybind", cxxopts::value<bool>()->default_value("false"))
         ("match-pid", "Match the pid of the executed command, must be a unique instance to function", cxxopts::value<bool>()->default_value("false"))
         ("match-process-name", "Match the process name", cxxopts::value<bool>()->default_value("false"))
         ("pid", "Pid to match, takes precedence over process name", cxxopts::value<int>()->default_value("0"))
@@ -53,11 +53,12 @@ void mzd_args_populate_context(struct MzdContext *context, const int argc, const
         mzd_flags_set(flags, MZD_VERIFY);
     if (result["close"].as<bool>())
         mzd_flags_set(flags, MZD_CLOSE);
-    if (result["keybind"].as<bool>())
+    const bool extract_keybind = result["extract-keybind"].as<bool>();
+    if (result["keybind"].as<bool>() || extract_keybind)
         mzd_flags_set(flags, MZD_KEYBIND);
+    context->extract_keybind = extract_keybind;
     context->flags = flags;
     context->background = result["background"].as<bool>();
-    context->extract_keybind = result["extract-keybind"].as<bool>();
     context->match_pid = result["match-pid"].as<bool>();
     context->match_process_name = result["match-process-name"].as<bool>();
     context->pid = result["pid"].as<int>();
