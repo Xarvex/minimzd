@@ -87,23 +87,6 @@ int main(const int argc, const char **argv) {
         mzd_windowv_free(windows);
     }
 
-    if (1) {
-        printf("flags: %d\n", c.flags);
-        printf("extract_keybind: %d\n", c.extract_keybind);
-        printf("match_pid: %d\n", c.match_pid);
-        printf("match_process_name: %d\n", c.match_process_name);
-        printf("pid: %d\n", c.pid);
-        printf("process-name: %s\n", c.process_name);
-        printf("window-class-instance: %s\n", c.window_class_instance);
-        printf("window_class: %s\n", c.window_class);
-        printf("command:");
-        if (c.command) {
-            for (int i = 0; c.command[i]; i++)
-                printf(" %s", c.command[i]);
-        }
-        puts("");
-    }
-
     pid_t pid = 0;
     if (c.command) {
         pid = mzd_fork_execute(c.command, c.background);
