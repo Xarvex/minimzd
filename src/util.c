@@ -22,7 +22,6 @@ const char **mzd_str_split(const char *str, const char delim, void **ptr) {
     p = s;
     for (int i = 0; i < c; i++) {
         strings[i] = p;
-        printf("%s\n", p);
         p = p + strlen(p) + 1;
     }
     strings[c] = 0;
