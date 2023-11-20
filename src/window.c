@@ -120,7 +120,7 @@ const struct MzdWindow **mzd_unsafe_window_manipulator_dbus_call_list(const stru
     DBusError dbus_error;
     dbus_error_init(&dbus_error); 
 
-    DBusMessage *response =  mzd_unsafe_window_manipulator_dbus_call_send(window_manipulator, query);
+    DBusMessage *response = mzd_unsafe_window_manipulator_dbus_call_send(window_manipulator, query);
     const char *windows_str = 0;
     dbus_message_get_args(response, &dbus_error, DBUS_TYPE_STRING, &windows_str, DBUS_TYPE_INVALID);
     yyjson_doc *const doc = yyjson_read(windows_str, strlen(windows_str), 0);
