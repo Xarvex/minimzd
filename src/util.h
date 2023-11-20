@@ -15,8 +15,9 @@
 #define MZD_DJB2_WINDOW_TYPE          13899948338458281438ul // "window_type"
 #define MZD_DJB2_FOCUS                210712614469ul         // "focus"
 
-#define mzd_flags_set(flags, flag) (flags |= flag)
-#define mzd_flags_has(flags, flag) ((flags & flag) != 0)
+#define mzd_flags_set(flags, flag)   (flags |=  flag)
+#define mzd_flags_unset(flags, flag) (flags &= ~flag)
+#define mzd_flags_has(flags, flag)   ((flags & flag) != 0)
 
 #define mzd_nanoseconds_ms(x) x * 1000000L
 #define mzd_nanoseconds_s(x) mzd_nanoseconds_ms(x * 1000)
