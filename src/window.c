@@ -223,16 +223,15 @@ const char *mzd_window_manipulator_title(const struct MzdWindowManipulator *wind
 void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window, const unsigned short flags) {
     if (mzd_flags_has(flags, MZD_KEYBIND)) {
         if (window->focus)
-            mzd_flags_has(flags, MZD_CLOSE) ?
-                mzd_window_manipulator_uinput_use_close(window_manipulator) :
-                mzd_window_manipulator_uinput_use_minimize(window_manipulator);
+            (mzd_flags_has(flags, MZD_CLOSE) ?
+                mzd_window_manipulator_uinput_use_close :
+                mzd_window_manipulator_uinput_use_minimize
+            )(window_manipulator);
         else
             mzd_window_manipulator_focus(window_manipulator, window);
     }
     else
-        mzd_flags_has(flags, MZD_CLOSE) ?
-            mzd_unsafe_window_manipulator_dbus_call_with_window(window_manipulator, "Close", window) :
-            mzd_unsafe_window_manipulator_dbus_call_with_window(window_manipulator, "Minimize", window);
+        mzd_unsafe_window_manipulator_dbus_call_with_window(window_manipulator, mzd_flags_has(flags, MZD_CLOSE) ? "Close" : "Minimize", window);
 }
 
 void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter, const unsigned short flags) {
