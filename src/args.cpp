@@ -12,7 +12,7 @@ extern "C" {
 void mzd_args_populate_context(struct MzdContext *context, const int argc, const char **argv) {
     cxxopts::Options options(
         "minimzd",
-        "Simple utility for launch programs minimized or closed, when they otherwise don't like to"
+        "Simple utility to launch programs minimized or closed, when they otherwise don't like to"
     );
 
     options.add_options()
