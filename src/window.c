@@ -8,7 +8,8 @@
 #include <yyjson.h>
 
 void mzd_dbus_error_guard(DBusError *error) {
-    if (dbus_error_is_set(error)) {
+    // no direct enum or flag exists, as far as I can tell
+    if (dbus_error_is_set(error) && strcmp(error->message, "Not found")) {
         fprintf(stderr, "%s", error->message);
         dbus_error_free(error);
         abort();
@@ -179,10 +180,12 @@ const char *mzd_unsafe_window_manipulator_dbus_call_title(const struct MzdWindow
     dbus_error_init(&dbus_error);
 
     DBusMessage *response = mzd_unsafe_window_manipulator_dbus_call_send(window_manipulator, query);
-    const char *title;
-    dbus_message_get_args(response, &dbus_error, DBUS_TYPE_STRING, &title, DBUS_TYPE_INVALID);
+    const char *title = 0;
+    if (response) {
+        dbus_message_get_args(response, &dbus_error, DBUS_TYPE_STRING, &title, DBUS_TYPE_INVALID);
+        dbus_message_unref(response);
+    }
 
-    dbus_message_unref(response);
     dbus_error_free(&dbus_error);
     return title;
 }
@@ -220,21 +223,32 @@ const char *mzd_window_manipulator_title(const struct MzdWindowManipulator *wind
     return title;
 }
 
-void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window, const unsigned short flags) {
+bool mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window, const unsigned short flags) {
     if (mzd_flags_has(flags, MZD_KEYBIND)) {
         if (window->focus)
             (mzd_flags_has(flags, MZD_CLOSE) ?
                 mzd_window_manipulator_uinput_use_close :
                 mzd_window_manipulator_uinput_use_minimize
             )(window_manipulator);
-        else
+        else {
             mzd_window_manipulator_focus(window_manipulator, window);
+            return false;
+        }
     }
     else
         mzd_unsafe_window_manipulator_dbus_call_with_window(window_manipulator, mzd_flags_has(flags, MZD_CLOSE) ? "Close" : "Minimize", window);
+
+    if (mzd_flags_has(flags, MZD_VERIFY))
+        if (mzd_flags_has(flags, MZD_CLOSE))
+            return mzd_window_manipulator_title(window_manipulator, window) == 0;
+    return true;
 }
 
 void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter, const unsigned short flags) {
+    unsigned short f = flags;
+    if (!mzd_flags_has(f, MZD_FIRST))
+        mzd_flags_unset(f, MZD_VERIFY); // status does not get used
+
     struct timespec time, remaining;
     time.tv_sec = 0;
     time.tv_nsec = mzd_nanoseconds_ms(500);
@@ -244,9 +258,10 @@ void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_mani
         for (int i = 0; windows[i]; i++) {
             const struct MzdWindow *window = windows[i];
             if (mzd_window_filter(window_filter, window)) {
-                mzd_window_manipulator_minimize(window_manipulator, window, flags);
-
-                if (mzd_flags_has(flags, MZD_FIRST)) {
+                if (
+                    mzd_window_manipulator_minimize(window_manipulator, window, f) &&
+                    mzd_flags_has(f, MZD_FIRST)
+                ) {
                     mzd_windowv_free(windows);
 
                     // really not evil, breaking out of nested loop
