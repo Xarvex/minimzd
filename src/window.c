@@ -174,6 +174,19 @@ const struct MzdWindow **mzd_unsafe_window_manipulator_dbus_call_list(const stru
     return windows;
 }
 
+const char *mzd_unsafe_window_manipulator_dbus_call_title(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query) {
+    DBusError dbus_error;
+    dbus_error_init(&dbus_error);
+
+    DBusMessage *response = mzd_unsafe_window_manipulator_dbus_call_send(window_manipulator, query);
+    const char *title;
+    dbus_message_get_args(response, &dbus_error, DBUS_TYPE_STRING, &title, DBUS_TYPE_INVALID);
+
+    dbus_message_unref(response);
+    dbus_error_free(&dbus_error);
+    return title;
+}
+
 void mzd_unsafe_window_manipulator_dbus_call(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query) {
     dbus_message_unref(mzd_unsafe_window_manipulator_dbus_call_send(window_manipulator, query));
 }
@@ -197,6 +210,14 @@ const struct MzdWindow **mzd_window_manipulator_list(const struct MzdWindowManip
 
 void mzd_window_manipulator_focus(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window) {
     mzd_unsafe_window_manipulator_dbus_call_with_window(window_manipulator, "Activate", window);
+}
+
+const char *mzd_window_manipulator_title(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window) {
+    DBusMessage *query = mzd_dbus_call_create_with_window("GetTitle", window);
+    const char *title = mzd_unsafe_window_manipulator_dbus_call_title(window_manipulator, query);
+
+    dbus_message_unref(query);
+    return title;
 }
 
 void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window, const unsigned short flags) {

@@ -50,11 +50,13 @@ void mzd_window_manipulator_uinput_use_minimize(const struct MzdWindowManipulato
 
 DBusMessage *mzd_unsafe_window_manipulator_dbus_call_send(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query);
 const struct MzdWindow **mzd_unsafe_window_manipulator_dbus_call_list(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query);
+const char *mzd_unsafe_window_manipulator_dbus_call_title(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query);
 void mzd_unsafe_window_manipulator_dbus_call(const struct MzdWindowManipulator *window_manipulator, DBusMessage *query);
 void mzd_unsafe_window_manipulator_dbus_call_with_window(const struct MzdWindowManipulator *window_manipulator, const char *method, const struct MzdWindow *window);
 
 const struct MzdWindow **mzd_window_manipulator_list(const struct MzdWindowManipulator *window_manipulator);
 void mzd_window_manipulator_focus(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window);
+const char *mzd_window_manipulator_title(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window);
 void mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window, const unsigned short flags);
 void mzd_window_manipulator_close(const struct MzdWindowManipulator *window_manipulator, const struct MzdWindow *window, const unsigned short flags);
 void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_manipulator, struct MzdWindowFilter *window_filter, const unsigned short flags);
