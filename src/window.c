@@ -238,9 +238,38 @@ bool mzd_window_manipulator_minimize(const struct MzdWindowManipulator *window_m
     else
         mzd_unsafe_window_manipulator_dbus_call_with_window(window_manipulator, mzd_flags_has(flags, MZD_CLOSE) ? "Close" : "Minimize", window);
 
-    if (mzd_flags_has(flags, MZD_VERIFY))
+    if (mzd_flags_has(flags, MZD_VERIFY)) {
         if (mzd_flags_has(flags, MZD_CLOSE))
             return mzd_window_manipulator_title(window_manipulator, window) == 0;
+        else {
+            DBusMessage *query = mzd_dbus_call_create_with_window("Details", window);
+            DBusMessage *response = mzd_unsafe_window_manipulator_dbus_call_send(window_manipulator, query);
+
+            DBusError dbus_error;
+            dbus_error_init(&dbus_error);
+
+            bool focus = false;
+            if (response) {
+                const char *focus_str;
+                dbus_message_get_args(response, &dbus_error, DBUS_TYPE_STRING, &focus_str, DBUS_TYPE_INVALID);
+                dbus_message_unref(response);
+                
+                yyjson_doc *const doc = yyjson_read(focus_str, strlen(focus_str), 0);
+                yyjson_obj_iter obj_iter = yyjson_obj_iter_with(yyjson_doc_get_root(doc));
+                yyjson_val *key;
+                while ((key = yyjson_obj_iter_next(&obj_iter)))
+                    if (mzd_str_djb2(key->uni.str) == MZD_DJB2_FOCUS)
+                        focus = unsafe_yyjson_get_bool(yyjson_obj_iter_get_val(key));
+
+                yyjson_doc_free(doc);
+            }
+
+            dbus_message_unref(query);
+            dbus_error_free(&dbus_error);
+
+            return !focus;
+        }
+    }
     return true;
 }
 
