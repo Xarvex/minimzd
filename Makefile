@@ -24,7 +24,7 @@ POSTPROD := llvm-strip $(TDIR)/$(TARGET)
 
 CFLAGS        :=
 CPPFLAGS      := -std=c++11
-CCPPFLAGS     := -Wall
+CCPPFLAGS     := -Wall -Wstrict-prototypes
 CFLAGSDEV     :=
 CPPFLAGSDEV   :=
 CCPPFLAGSDEV  := -O0 -ggdb3 -g
