@@ -30,7 +30,7 @@ CPPFLAGSDEV   :=
 CCPPFLAGSDEV  := -O0 -ggdb3 -g
 CFLAGSPROD    := -fno-asynchronous-unwind-tables
 CPPFLAGSPROD  := -fno-exceptions
-CCPPFLAGSPROD := -O3 -fmerge-all-constants -ffast-math -ffunction-sections -fdata-sections -fno-stack-protector -fno-ident
+CCPPFLAGSPROD := -Werror -O3 -fmerge-all-constants -ffast-math -ffunction-sections -fdata-sections -fno-stack-protector -fno-ident
 
 VALGRIND := G_DEBUG=resident-modules valgrind  -s --leak-check=full --show-leak-kinds=definite,possible --track-origins=yes --num-callers=20 --suppressions=/usr/share/glib-2.0/valgrind/glib.supp --log-file=valgrind-out.txt
 
