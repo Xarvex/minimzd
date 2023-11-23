@@ -130,7 +130,7 @@ void mzd_keybindv_free(const mzd_key **keybindv) {
 
 
 
-const int mzd_uinput_connect() {
+const int mzd_uinput_connect(void) {
     return open("/dev/uinput", O_WRONLY | O_NONBLOCK);
 }
 

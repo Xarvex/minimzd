@@ -28,7 +28,7 @@ const mzd_key **mzd_keybindv_extract_close(GSettings *settings);
 
 void mzd_keybindv_free(const mzd_key **keybindv);
 
-const int mzd_uinput_connect();
+const int mzd_uinput_connect(void);
 void mzd_uinput_prepare(const int fd, const mzd_key *keybind);
 void mzd_uinput_setup(const int fd);
 void mzd_uinput_use(const int fd, const mzd_key *keybind);
