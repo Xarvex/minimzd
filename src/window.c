@@ -280,7 +280,7 @@ void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_mani
 
     struct timespec time, remaining;
     time.tv_sec = 0;
-    time.tv_nsec = mzd_nanoseconds_ms(500);
+    time.tv_nsec = mzd_nanoseconds_ms(200);
 
     for (long t = 0; t < mzd_nanoseconds_s(5); t += time.tv_nsec) {
         const struct MzdWindow **windows = mzd_window_manipulator_list(window_manipulator);
