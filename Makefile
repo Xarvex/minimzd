@@ -15,7 +15,7 @@ SCRDIR := tools
 
 CC     := clang
 CPPC   := $(CC)++
-PKG    := pkgconf
+PKG    := pkg-config
 PKGOBJ := $(PKG) --cflags
 PKGT   := $(PKG) --libs
 
