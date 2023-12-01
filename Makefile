@@ -47,6 +47,7 @@ else ifeq ($(MODE),dev)
 endif
 
 LIBS        := dbus-1 gio-2.0
+LINHEADERS  := /usr/include/linux
 GDKDIR      := $(TPDIR)/gdk
 GDKSDIR     := $(GDKDIR)/src
 GDKGDIR     := $(GDKDIR)/generated
@@ -138,7 +139,7 @@ $(GDKGDIR)/keynamesprivate.h: $(GDKSDIR)/gen-keyname-table.pl $(GDKSDIR)/keyname
 	$^ > $@
 
 $(GDIR)/$(KMAP).h: $(CKMAP) | $(GDKGDIR)/keynamesprivate.h $(GDIR)
-	$(CKMAP) /usr/include/linux/input-event-codes.h $(GDKGDIR)/keynamesprivate.h > $@
+	$(CKMAP) $(LINHEADERS)/input-event-codes.h $(GDKGDIR)/keynamesprivate.h > $@
 
 $(IDIR)/keymap.h: $(GDIR)/$(KMAP).h | $(IDIR)
 	-rm -f $@
