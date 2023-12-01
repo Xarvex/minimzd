@@ -9,3 +9,6 @@ build:
     - ln -s ../src/cxxopts/include/cxxopts.hpp /usr/local/include/cxxopts.hpp
   script:
     - make LINHEADERS=$(realpath /usr/src/linux-aws-*-headers-*/include/uapi/linux)
+  artifacts:
+    paths:
+      - bin/*
