@@ -31,7 +31,7 @@ void mzd_args_populate_context(struct MzdContext *context, const int argc, const
         ("process-name", "Process name to match, takes precedence over window class", cxxopts::value<std::string>())
         ("window-class-instance", "Window class instance to match, takes precedence over window class", cxxopts::value<std::string>())
         ("window-class", "Window class to match, lowest precedence", cxxopts::value<std::string>())
-        ("timeout,t", "Allowed amount of time to run", cxxopts::value<std::string>())
+        // ("timeout,t", "Allowed amount of time to run", cxxopts::value<std::string>())
     ;
     options.parse_positional({ "command" });
 

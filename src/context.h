@@ -15,12 +15,12 @@ struct MzdContext {
     const char *process_name;
     const char *window_class_instance;
     const char *window_class;
-    long timeout;
+    // long timeout;
     const char **command;
     void *command_ptr;
 };
 
-static const struct MzdContext mzd_context_default = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+static const struct MzdContext mzd_context_default = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 void mzd_context_free(struct MzdContext *context);
 
