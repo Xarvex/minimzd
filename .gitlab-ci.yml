@@ -4,7 +4,7 @@ build:
   stage: build
   before_script:
     - apt-get update
-    - apt-get -y install curl clang cmake git libdbus-1-dev libglib2.0-dev linux-headers-aws-edge make pkg-config python3
+    - apt-get -y install curl clang cmake git libdbus-1-dev libglib2.0-dev linux-headers-aws-edge llvm make pkg-config python3
     - git clone https://github.com/jarro2783/cxxopts --depth 1 --branch $(curl -s https://api.github.com/repos/jarro2783/cxxopts/releases/latest | grep tag_name | cut -d '"' -f 4) /usr/local/src/cxxopts
     - ln -s ../src/cxxopts/include/cxxopts.hpp /usr/local/include/cxxopts.hpp
   script:
