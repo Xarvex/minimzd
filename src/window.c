@@ -286,16 +286,13 @@ void mzd_window_manipulator_match(const struct MzdWindowManipulator *window_mani
         const struct MzdWindow **windows = mzd_window_manipulator_list(window_manipulator);
         for (int i = 0; windows[i]; i++) {
             const struct MzdWindow *window = windows[i];
-            if (mzd_window_filter(window_filter, window)) {
-                if (
-                    mzd_window_manipulator_minimize(window_manipulator, window, f) &&
-                    mzd_flags_has(f, MZD_FIRST)
-                ) {
-                    mzd_windowv_free(windows);
-
-                    // really not evil, breaking out of nested loop
-                    goto end;
-                }
+            if (
+                mzd_window_filter(window_filter, window) &&
+                mzd_window_manipulator_minimize(window_manipulator, window, f) &&
+                mzd_flags_has(f, MZD_FIRST)
+            ) {
+                mzd_windowv_free(windows);
+                goto end; // really not evil, breaking out of nested loop
             }
         }
 
