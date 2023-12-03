@@ -12,3 +12,8 @@ build:
   artifacts:
     paths:
       - bin/minimzd
+  cache:
+    paths:
+      - "generated/*"
+      - "obj/*"
+      - "third-party/*.a"
