@@ -1,14 +1,39 @@
-image: ubuntu:latest
+default:
+  image: ubuntu:latest
 
-build:
+job_compile:
   stage: build
   before_script:
     - apt-get update
-    - apt-get -y install curl clang cmake git libdbus-1-dev libglib2.0-dev linux-headers-aws-edge make pkg-config python3
-    - git clone https://github.com/jarro2783/cxxopts --depth 1 --branch $(curl -s https://api.github.com/repos/jarro2783/cxxopts/releases/latest | grep tag_name | cut -d '"' -f 4) /usr/local/src/cxxopts
-    - ln -s ../src/cxxopts/include/cxxopts.hpp /usr/local/include/cxxopts.hpp
+    - apt-get -y install curl clang git libdbus-1-dev libglib2.0-dev llvm make pkg-config python3
+    - if ! [ -d third-party/linux-headers ]; then apt-get -y install linux-headers-aws-edge && cp -r /usr/src/linux-aws-*-headers-*/include/uapi/linux third-party/linux-headers; fi
+    - "[ -d third-party/cxxopts ] || git clone https://github.com/jarro2783/cxxopts --depth 1 --branch $(curl -s https://api.github.com/repos/jarro2783/cxxopts/releases/latest | grep tag_name | cut -d '\"' -f 4) third-party/cxxopts"
+    - '[ -d third-party/yyjson ] || apt-get -y install cmake'
+    - ln -s $(realpath third-party/cxxopts/include/cxxopts.hpp) /usr/local/include/cxxopts.hpp
   script:
-    - make LINHEADERS=$(realpath /usr/src/linux-aws-*-headers-*/include/uapi/linux)
+    - make MODE=prod LINHEADERS=third-party/linux-headers
   artifacts:
     paths:
-      - bin/*
+      - bin/minimzd
+  cache:
+    key: compile-$CI_COMMIT_REF_SLUG
+    paths:
+      - 'generated/*'
+      - 'obj/*'
+      - 'pkgconfig/*.pc'
+      - 'third-party/cxxopts/include/cxxopts.hpp'
+      - 'third-party/linux-headers/*'
+      - 'third-party/yyjson/src/yyjson.h'
+      - 'third-party/yyjson/build/libyyjson.a'
+
+job_release:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - ':'
+  release:
+    tag_name: $CI_COMMIT_TAG
+    description: $CI_COMMIT_TAG_MESSAGE
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
