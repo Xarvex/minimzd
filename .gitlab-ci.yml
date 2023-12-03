@@ -16,9 +16,11 @@ job_compile:
   cache:
     key: compile-$CI_COMMIT_REF_SLUG
     paths:
+      - "/usr/local/src/cxxopts/include/cxxopts.hpp"
       - "generated/*"
       - "obj/*"
-      - "third-party/**.a"
+      - "pkgconfig/*.pc"
+      - "third-party/yyjson/build/*.a"
 
 job_release:
   stage: deploy
