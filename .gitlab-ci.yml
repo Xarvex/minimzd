@@ -18,7 +18,7 @@ job_compile:
     paths:
       - "generated/*"
       - "obj/*"
-      - "third-party/*.a"
+      - "third-party/**.a"
 
 job_release:
   stage: deploy
