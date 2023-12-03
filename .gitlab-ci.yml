@@ -22,6 +22,7 @@ job_compile:
       - 'obj/*'
       - 'pkgconfig/*.pc'
       - 'third-party/cxxopts/include/cxxopts.hpp'
+      - 'third-party/gdk/*'
       - 'third-party/linux-headers/input-event-codes.h'
       - 'third-party/yyjson/src/yyjson.h'
       - 'third-party/yyjson/build/libyyjson.a'
