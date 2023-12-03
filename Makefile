@@ -143,7 +143,7 @@ $(GDIR)/$(KMAP).h: $(CKMAP) | $(GDKGDIR)/keynamesprivate.h $(GDIR)
 
 $(IDIR)/keymap.h: | $(GDIR)/$(KMAP).h $(IDIR)
 	-rm -f $@
-	ln -s $$($(RPATH) $^ $(IDIR)) $@
+	ln -s $$($(RPATH) $(GDIR)/$(KMAP).h $(IDIR)) $@
 
 $(YYJSONDIR): | $(TPDIR)
 	$(call update-local-dependency-git,$(YYJSONDIR),https://github.com/ibireme/yyjson.git)
