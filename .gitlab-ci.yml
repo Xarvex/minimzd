@@ -1,4 +1,5 @@
-image: ubuntu:latest
+default:
+  image: ubuntu:latest
 
 build:
   stage: build
