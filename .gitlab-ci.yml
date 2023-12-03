@@ -16,7 +16,6 @@ job_compile:
   cache:
     key: compile-$CI_COMMIT_REF_SLUG
     paths:
-      - "/usr/local/src/cxxopts/include/cxxopts.hpp"
       - "generated/*"
       - "obj/*"
       - "pkgconfig/*.pc"
