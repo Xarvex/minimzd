@@ -8,6 +8,7 @@ job_compile:
     - apt-get -y install curl clang git libdbus-1-dev libglib2.0-dev llvm make pkg-config python3
     - if ! [ -d third-party/linux-headers ]; then mkdir -p third-party/linux-headers && apt-get -y install linux-headers-aws-edge && cp -r /usr/src/linux-aws-*-headers-*/include/uapi/linux/. third-party/linux-headers; fi
     - "[ -d third-party/cxxopts ] || git clone https://github.com/jarro2783/cxxopts --depth 1 --branch $(curl -s https://api.github.com/repos/jarro2783/cxxopts/releases/latest | grep tag_name | cut -d '\"' -f 4) third-party/cxxopts"
+    - rm -rf third-party/yyjson
     - '[ -d third-party/yyjson ] || apt-get -y install cmake'
     - ln -s $(realpath third-party/cxxopts/include/cxxopts.hpp) /usr/local/include/cxxopts.hpp
   script:
