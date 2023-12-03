@@ -7,7 +7,7 @@ job_compile:
     - apt-get update
     - apt-get -y install clang libdbus-1-dev libglib2.0-dev llvm make pkg-config
     - if ! [ -d third-party/linux-headers ]; then mkdir -p third-party/linux-headers && apt-get -y install linux-headers-aws-edge && cp -r /usr/src/linux-aws-*-headers-*/include/uapi/linux/. third-party/linux-headers; fi
-    - "[ -d third-party/cxxopts ] || apt-get -y install curl git && git clone https://github.com/jarro2783/cxxopts --depth 1 --branch $(curl -s https://api.github.com/repos/jarro2783/cxxopts/releases/latest | grep tag_name | cut -d '\"' -f 4) third-party/cxxopts"
+    - if ! [ -d third-party/cxxopts ]; then apt-get -y install curl git && git clone https://github.com/jarro2783/cxxopts --depth 1 --branch $(curl -s https://api.github.com/repos/jarro2783/cxxopts/releases/latest | grep tag_name | cut -d '\"' -f 4) third-party/cxxopts; fi
     - '[ -d third-party/gdk ] || apt-get -y install curl'
     - '[ -d third-party/yyjson ] || apt-get -y install cmake git'
     - '[ -f include/keymap.h ] || apt-get -y install python3'
