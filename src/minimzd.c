@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -19,6 +20,9 @@
 #define ANSI_MAGENTA "\x1b[35m"
 #define ANSI_CYAN    "\x1b[36m"
 #define ANSI_RESET   "\x1b[0m"
+
+#define PIDOF "pidof -x "
+#define PIDOF_SIZE 10
 
 pid_t mzd_fork_execute(const char **command, const bool silent) {
     pid_t pid = fork();
@@ -41,6 +45,13 @@ pid_t mzd_fork_execute(const char **command, const bool silent) {
 
 bool mzd_window_filter_call_pid(const struct MzdWindow *window, int *pid) {
     return window->pid == *pid;
+}
+
+bool mzd_window_filter_call_pid_any(const struct MzdWindow *window, int **pids) {
+    for (int i = 0; (*pids)[i]; i++)
+        if (window->pid == (*pids)[i])
+            return true;
+    return false;
 }
 
 bool mzd_window_filter_call_class_instance(const struct MzdWindow *window, char **window_class_instance) {
@@ -102,9 +113,44 @@ int main(const int argc, const char **argv) {
     if (mzd_flags_has(c.flags, MZD_KEYBIND))
         mzd_window_manipulator_uinput_attach(&wm);
 
+    int *pids = 0;
     struct MzdWindowFilter *window_filter = 0;
     if (c.pid)
         window_filter = mzd_window_filter_init(&mzd_window_filter_call_pid, &c.pid);
+    else if (c.process_name) {
+        char *command = malloc(PIDOF_SIZE + strlen(c.process_name));
+        strncpy(command, PIDOF, PIDOF_SIZE);
+        strncat(command, c.process_name, sizeof(command) - PIDOF_SIZE);
+        FILE *fp = popen(command, "r");
+
+        char *line = 0;
+        size_t len = 0;
+        getline(&line, &len, fp);
+
+        char *p = line;
+        puts(command);
+        int c = 1;
+        while ((p = strchr(p, ' '))) {
+            if (strlen(p) > 1) {
+                *p++ = 0;
+                c++;
+            } else
+                *p = 0;
+        }
+        p = line;
+
+        pids = malloc(sizeof(int) * (c + 1));
+        for (int i = 0; i < c; i++) {
+            pids[i] = atoi(p);
+            p += strlen(p) + 1;
+        }
+        pids[c] = 0;
+
+        pclose(fp);
+        free(line);
+
+        window_filter = mzd_window_filter_init(&mzd_window_filter_call_pid_any, &pids);
+    }
     else if (c.window_class_instance)
         window_filter = mzd_window_filter_init(&mzd_window_filter_call_class_instance, &c.window_class_instance);
     else if (c.window_class)
@@ -112,6 +158,9 @@ int main(const int argc, const char **argv) {
 
     if (window_filter)
         mzd_window_manipulator_match(&wm, window_filter, c.flags);
+
+    if (pids)
+        free(pids);
 
     mzd_window_manipulator_free(&wm);
     mzd_context_free(&c);
