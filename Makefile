@@ -141,7 +141,7 @@ $(GDKGDIR)/keynamesprivate.h: $(GDKSDIR)/gen-keyname-table.pl $(GDKSDIR)/keyname
 $(GDIR)/$(KMAP).h: $(CKMAP) | $(GDKGDIR)/keynamesprivate.h $(GDIR)
 	$(CKMAP) $(LINHEADERS)/input-event-codes.h $(GDKGDIR)/keynamesprivate.h > $@
 
-$(IDIR)/keymap.h: $(GDIR)/$(KMAP).h | $(IDIR)
+$(IDIR)/keymap.h: | $(GDIR)/$(KMAP).h $(IDIR)
 	-rm -f $@
 	ln -s $$($(RPATH) $^ $(IDIR)) $@
 
