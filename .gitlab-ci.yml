@@ -5,10 +5,12 @@ job_compile:
   stage: build
   before_script:
     - apt-get update
-    - apt-get -y install curl clang git libdbus-1-dev libglib2.0-dev llvm make pkg-config python3
-    - if ! [ -d third-party/linux-headers ]; then apt-get -y install linux-headers-aws-edge && cp -r /usr/src/linux-aws-*-headers-*/include/uapi/linux third-party/linux-headers; fi
-    - "[ -d third-party/cxxopts ] || git clone https://github.com/jarro2783/cxxopts --depth 1 --branch $(curl -s https://api.github.com/repos/jarro2783/cxxopts/releases/latest | grep tag_name | cut -d '\"' -f 4) third-party/cxxopts"
-    - '[ -d third-party/yyjson ] || apt-get -y install cmake'
+    - apt-get -y install --no-install-recommends --no-install-suggests clang libdbus-1-dev libglib2.0-dev llvm make pkg-config
+    - if ! [ -d third-party/linux-headers ]; then mkdir -p third-party/linux-headers && apt-get -y install --no-install-recommends --no-install-suggests linux-headers-aws-edge && cp -r /usr/src/linux-aws-*-headers-*/include/uapi/linux/. third-party/linux-headers; fi
+    - if ! [ -d third-party/cxxopts ]; then apt-get -y install --no-install-recommends --no-install-suggests curl git && git clone https://github.com/jarro2783/cxxopts --depth 1 --branch $(curl -s https://api.github.com/repos/jarro2783/cxxopts/releases/latest | grep tag_name | cut -d '\"' -f 4) third-party/cxxopts; fi
+    - '[ -d third-party/gdk ] || apt-get -y install --no-install-recommends --no-install-suggests curl'
+    - '[ -d third-party/yyjson ] || apt-get -y install --no-install-recommends --no-install-suggests cmake git'
+    - '[ -f include/keymap.h ] || apt-get -y install --no-install-recommends --no-install-suggests python3'
     - ln -s $(realpath third-party/cxxopts/include/cxxopts.hpp) /usr/local/include/cxxopts.hpp
   script:
     - make MODE=prod LINHEADERS=third-party/linux-headers
@@ -19,10 +21,12 @@ job_compile:
     key: compile-$CI_COMMIT_REF_SLUG
     paths:
       - 'generated/*'
+      - 'include/*'
       - 'obj/*'
       - 'pkgconfig/*.pc'
       - 'third-party/cxxopts/include/cxxopts.hpp'
-      - 'third-party/linux-headers/*'
+      - 'third-party/gdk/*'
+      - 'third-party/linux-headers/input-event-codes.h'
       - 'third-party/yyjson/src/yyjson.h'
       - 'third-party/yyjson/build/libyyjson.a'
 
